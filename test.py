@@ -17,7 +17,6 @@ class Test():
         self.search_string = ""
         self.expected_result = None
         self.precision = None
-        #self.ok = None
 
 
 '''
@@ -67,7 +66,6 @@ def check_result(test, answer):
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
                 precision) + "\n"
         output += "Actual answer: " + answer
-
         print colored(output, 'red')
 
 
@@ -80,15 +78,18 @@ run 0 steps (i.e, output the initial system without outputting the first move af
 
 def run_test(test):
     #TODO: generate these paths dynamically
-    mpmc_exe = '../../build/mpmc' #two directories up because when we cd down we're one dir further from the exe
+    #exe is two directories up because when we cd down we're one dir further from the exe
+    mpmc_exe = '../../build/mpmc'
     test_dir = 'inputs/'
     input_file = test.input_file
     cwd = os.getcwd()
     os.chdir(test_dir)
     out = check_output([mpmc_exe, input_file])
     out = out.decode("ascii", errors="ignore")
+    #stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
     numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
-    rx = re.compile(numeric_const_pattern, re.VERBOSE)
+    #probably doesn't need to be done each time this function is called
+    rx = re.compile(numeric_const_pattern, re.VERBOSE
     for line in out.splitlines():
         term = test.search_string
         if term in line:
@@ -96,8 +97,6 @@ def run_test(test):
             break
     check_result(test, result)
     os.chdir(cwd)
-
-   #rm *.dat *final* *restart* *traj*
 
 def main():
     tests = read_test_parameters()
