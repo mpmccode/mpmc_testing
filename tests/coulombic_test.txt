@@ -1,0 +1,6 @@
+name coulombic
+input coulombic.inp
+pqr coulombic.pqr
+term OUTPUT: electrostatic energy
+output 19295.2415
+precision 0.015
