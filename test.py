@@ -89,7 +89,7 @@ def run_test(test):
     #stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
     numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
     #probably doesn't need to be done each time this function is called
-    rx = re.compile(numeric_const_pattern, re.VERBOSE
+    rx = re.compile(numeric_const_pattern, re.VERBOSE)
     for line in out.splitlines():
         term = test.search_string
         if term in line:
