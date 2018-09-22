@@ -4,8 +4,6 @@ import os
 import os.path
 import re
 import subprocess
-from termcolor import colored
-
 
 class Test():
     def __init__(self):
@@ -54,15 +52,18 @@ def check_result(test, answer):
     if precision == "exact":
         precision = 0.0
 
+    CGREEN  = '\33[32m'
+    CRED = '\033[91m'
+    CEND = '\033[0m'
     if abs(float(answer) - float(expected)) <= precision:
         output = "Test " + test.name.strip() + " passed!"
-        print colored(output, 'green')
+        print CGREEN + output + CEND
     else:
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
                 precision) + "\n"
         output += "Actual answer: " + answer
-        print colored(output, 'red')
+        print CRED + output + CEND
 
 
 #Run the tests. We choose only the first match of a search string and find the
@@ -101,8 +102,8 @@ def cleanup():
     #using shell=True is a bit dangerous here, but it's the only way (as far as I can tell) to
     #have subprocess evaluate wildcards properly -L 
     subprocess.call("rm *.dat *.last *.restart.* *.traj* *.energy* *.final*", shell=True,
-                                                                   stdout=subprocess.PIPE,
-                                                                   stderr=subprocess.PIPE)
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
     os.chdir(cwd)
 
 def main():

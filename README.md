@@ -1,5 +1,5 @@
 # MPMC Tests
-This directory contains the tests, test inputs, and test runner (`test.py`) for the MPMC program. The only prerequisites to running the tests are python 2.7 and the `termcolor` library.
+This directory contains the tests, test inputs, and test runner (`test.py`) for the MPMC program. This program should run fine on any modern python installation.
 
 ## How to write tests
 Each test needs three files:
