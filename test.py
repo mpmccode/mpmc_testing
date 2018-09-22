@@ -3,8 +3,7 @@
 import os
 import os.path
 import re
-from subprocess import check_output
-from subprocess import call
+import subprocess
 from termcolor import colored
 
 
@@ -79,7 +78,7 @@ def run_test(test):
     input_file = test.input_file
     cwd = os.getcwd()
     os.chdir(test_dir)
-    out = check_output([mpmc_exe, input_file])
+    out = subprocess.check_output([mpmc_exe, input_file])
     out = out.decode("ascii", errors="ignore")
     #stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
     numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
@@ -103,7 +102,9 @@ def cleanup():
     print os.getcwd()
     #using shell=True is a bit dangerous here, but it's the only way (as far as I can tell) to
     #have subprocess evaluate wildcards properly -L 
-    call("rm *.dat *.last *.restart.* *.traj* *.energy* *.final*", shell=True)
+    subprocess.call("rm *.dat *.last *.restart.* *.traj* *.energy* *.final*", shell=True,
+                                                                   stdout=subprocess.PIPE,
+                                                                   stderr=subprocess.PIPE)
     os.chdir(cwd)
     print os.getcwd()
 
