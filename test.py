@@ -96,23 +96,20 @@ def run_test(test):
 #remove garbage in case the test writer forgets to redirect MPMC output to /dev/null in their input script
 def cleanup():
     test_dir = 'inputs/'
-    print os.getcwd()
     cwd = os.getcwd()
     os.chdir(test_dir)
-    print os.getcwd()
     #using shell=True is a bit dangerous here, but it's the only way (as far as I can tell) to
     #have subprocess evaluate wildcards properly -L 
     subprocess.call("rm *.dat *.last *.restart.* *.traj* *.energy* *.final*", shell=True,
                                                                    stdout=subprocess.PIPE,
                                                                    stderr=subprocess.PIPE)
     os.chdir(cwd)
-    print os.getcwd()
 
 def main():
     tests = read_test_parameters()
     for test in tests:
         run_test(test)
-    cleanup()
+    cleanup()#clean up, everybody clean up!
 
 
 if __name__ == '__main__':
