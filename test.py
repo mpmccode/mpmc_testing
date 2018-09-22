@@ -1,6 +1,4 @@
-'''
-Runs MPMC tests as defined in the README
-'''
+#Runs MPMC tests as defined in the README
 
 import os
 import os.path
@@ -19,9 +17,7 @@ class Test():
         self.precision = None
 
 
-'''
-Get our params and strip newlines wherever they broke other code
-'''
+#Get our params and strip newlines wherever they broke other code
 
 
 def read_test_parameters():
@@ -69,11 +65,9 @@ def check_result(test, answer):
         print colored(output, 'red')
 
 
-'''
-Run the tests. We choose only the first match of a search string and find the
-first floating point number after the match as result due to how MPMC is built: we can't
-run 0 steps (i.e, output the initial system without outputting the first move after.)
-'''
+#Run the tests. We choose only the first match of a search string and find the
+#first floating point number after the match as result due to how MPMC is built: we can't
+#run 0 steps (i.e, output the initial system without outputting the first move after.)
 
 
 def run_test(test):
