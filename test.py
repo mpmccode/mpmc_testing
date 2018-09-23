@@ -15,8 +15,7 @@ class Test():
         self.precision = None
 
 
-#Get our params and strip newlines wherever they broke other code
-
+#Get our params and strip newlines wherever they broke other code 
 
 def read_test_parameters():
     tests = []
@@ -47,15 +46,15 @@ def read_test_parameters():
 
 
 def check_result(test, answer):
-    precision = test.precision
-    expected = test.expected_result
-    if precision == "exact":
+    if test.precision == "exact":
         precision = 0.0
+    else:
+        precision = float(test.precision)
 
     CGREEN  = '\33[32m'
     CRED = '\033[91m'
     CEND = '\033[0m'
-    if abs(float(answer) - float(expected)) <= precision:
+    if abs(float(answer) - float(test.expected_result)) <= precision:
         output = "Test " + test.name.strip() + " passed!"
         print CGREEN + output + CEND
     else:
@@ -63,7 +62,7 @@ def check_result(test, answer):
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
                 precision) + "\n"
         output += "Actual answer: " + answer
-        print CRED + output + CEND
+        print  CRED + output + CEND
 
 
 #Run the tests. We choose only the first match of a search string and find the
