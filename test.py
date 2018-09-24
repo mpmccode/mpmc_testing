@@ -8,6 +8,7 @@ import re
 import subprocess
 import pdb
 
+
 class Test():
     def __init__(self):
         self.name = ""
@@ -21,6 +22,7 @@ class Test():
 '''
 Get our params and strip newlines wherever they broke other code 
 '''
+
 
 def read_test_parameters():
     tests = []
@@ -49,11 +51,13 @@ def read_test_parameters():
         tests.append(temp_test)
     return tests
 
+
 def test_passed(test):
-    CGREEN  = '\33[32m'
+    CGREEN = '\33[32m'
     CEND = '\033[0m'
     output = "Test " + test.name.strip() + " passed!"
     print CGREEN + output + CEND
+
 
 def test_failed(test):
     CRED = '\033[91m'
@@ -61,14 +65,15 @@ def test_failed(test):
     if test.precision == "greater" or test.precision == "less":
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + "\n"
-        output += "Actual answer: " + answer 
-        print  CRED + output + CEND
+        output += "Actual answer: " + answer
+        print CRED + output + CEND
     else:
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
-                precision) + "\n"
+            precision) + "\n"
         output += "Actual answer: " + answer
-        print  CRED + output + CEND
+        print CRED + output + CEND
+
 
 def check_result(test, answer):
     if test.precision == "exact":
@@ -86,7 +91,6 @@ def check_result(test, answer):
     else:
         precision = float(test.precision)
 
-
     if abs(float(answer) - float(test.expected_result)) <= precision:
         test_passed(test)
     elif str(test.answer) == "FAIL_SUBPROCESS":
@@ -94,25 +98,41 @@ def check_result(test, answer):
     else:
         test_failed(test)
 
+
+def run_once(f):
+    def wrapper(*args, **kwargs):
+        if not wrapper.has_run:
+            wrapper.has_run = True
+            return f(*args, **kwargs)
+
+    wrapper.has_run = False
+    return wrapper
+
+
+@run_once
+def check_mpmc_exists(executable):
+    if os.path.isfile(os.path.realpath(executable)):
+        print "MPMC executable found, continuing..."
+    else:
+        print "MPMC executable not found, halting program execution"
+
+
 #Run the tests. We choose only the first match of a search string and find the
 #first floating point number after the match as result due to how MPMC is built: we can't
 #run 0 steps (i.e, output the initial system without outputting the first move after.)
 
-#def check_mpmc_exists(executable):
-#TODO: implement this
-
 
 def run_test(test):
     #TODO: generate these paths dynamically
-    #exe is two directories up because when we cd down we're one dir further from the exe
-    mpmc_exe = '../../build/mpmc'
-    #check_mpmc_exists(mpmc_exe) #exit here if MPMC executable provided is not correct
     test_dir = 'inputs'
     input_file = test.input_file
     cwd = os.getcwd()
     os.chdir(test_dir)
+    mpmc_exe = '../../build/mpmc'
+    check_mpmc_exists(
+        mpmc_exe)  #exit here if MPMC executable provided is not correct
     try:
-        out = subprocess.check_output([mpmc_exe, input_file]) 
+        out = subprocess.check_output([mpmc_exe, input_file])
     except:
         out = "FAIL_SUBPROCESS"
         return
@@ -137,17 +157,20 @@ def cleanup():
     cwd = os.getcwd()
     os.chdir(test_dir)
     #using shell=True is a bit dangerous here, but it's the only way (as far as I can tell) to
-    #have subprocess evaluate wildcards properly -L 
-    subprocess.call("rm *.dat *.last *.restart.* *.traj* *.energy* *.final*", shell=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+    #have subprocess evaluate wildcards properly -L
+    subprocess.call(
+        "rm *.dat *.last *.restart.* *.traj* *.energy* *.final*",
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
     os.chdir(cwd)
+
 
 def main():
     tests = read_test_parameters()
     for test in tests:
         run_test(test)
-    cleanup()#clean up, everybody clean up!
+    cleanup()  #clean up, everybody clean up!
 
 
 if __name__ == '__main__':
