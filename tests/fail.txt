@@ -1,0 +1,6 @@
+name failure
+input failure.inp
+pqr failure.pqr
+term OUTPUT: electrostatic energy
+output 2.2
+precision 0.015

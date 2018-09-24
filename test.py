@@ -62,7 +62,7 @@ def test_passed(test):
     print CGREEN + output + CEND
 
 
-def test_failed(test):
+def test_failed(test, answer):
     CRED = '\033[91m'
     CEND = '\033[0m'
     if test.precision == "greater" or test.precision == "less":
@@ -73,7 +73,7 @@ def test_failed(test):
     else:
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
-            precision) + "\n"
+            test.precision) + "\n"
         output += "Actual answer: " + answer
         print CRED + output + CEND
 
@@ -85,21 +85,21 @@ def check_result(test, answer):
         if answer < expected_result:
             test_passed(test)
         else:
-            test_failed(test)
+            test_failed(test, answer)
     elif test.precision == "greater":
         if answer > expected_result:
             test_passed(test)
         else:
-            test_failed(test)
+            test_failed(test, answer)
     else:
         precision = float(test.precision)
 
     if abs(float(answer) - float(test.expected_result)) <= precision:
         test_passed(test)
-    elif str(test.answer) == "FAIL_SUBPROCESS":
+    elif str(test.expected_result) == "FAIL_SUBPROCESS":
         print CRED + "Test failed due to subprocess error-- is mpmc_testing in the right directory?" + CEND
     else:
-        test_failed(test)
+        test_failed(test, answer)
 
 
 def run_once(f):
@@ -132,12 +132,11 @@ def run_test(test):
     cwd = os.getcwd()
     os.chdir(test_dir)
     mpmc_exe = '../../build/mpmc'
-    check_mpmc_exists(
-        mpmc_exe)  #exit here if MPMC executable provided is not correct
+    check_mpmc_exists(mpmc_exe)  #exit here if MPMC executable provided is not correct
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
     except:
-        test.answer = "FAIL_SUBPROCESS"
+        test.expected_result = "FAIL_SUBPROCESS"
         return
 
     out = out.decode("ascii", errors="ignore")

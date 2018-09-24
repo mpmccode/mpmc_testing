@@ -1,0 +1,18 @@
+job_name                    failure
+
+ensemble                    uvt
+
+numsteps                    1
+corrtime                    1
+
+insert_probability          0.667
+move_factor                 1
+rot_factor                  1
+rd_lrc off
+
+temperature                 298
+pressure                    1
+
+read_pqr_box                on
+
+pqr_input                   failure.pqr 
