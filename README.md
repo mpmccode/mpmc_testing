@@ -18,5 +18,10 @@ Each test needs three files:
     output 12345.6789
     precision exact
 Note that a `precision` of `exact` is the same as setting the precision to `0.0`. `example.inp` and `example.pqr` are both in the `inputs/` directory, as noted above.
+For comparisons, use `less` or `greater` as needed. Less (or greater) than or equal to are not supported as of this time.
 ### Input/PQR Files
 If you're writing tests for MPMC, you should know what these are. Nonetheless, you can look at examples in `sample_configs/`  contained in the main `mpmc` directory if you want some inspiration.
+
+### Running tests
+At the moment, the test runner expects the mpmc_testing directory to be inside the main `mpmc` directory, with
+the `mpmc` executable itself being in `mpmc/build/`

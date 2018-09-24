@@ -1,9 +1,12 @@
-#Runs MPMC tests as defined in the README
+'''
+Runs MPMC tests as defined in the README
+'''
 
 import os
 import os.path
 import re
 import subprocess
+import pdb
 
 class Test():
     def __init__(self):
@@ -15,7 +18,9 @@ class Test():
         self.precision = None
 
 
-#Get our params and strip newlines wherever they broke other code 
+'''
+Get our params and strip newlines wherever they broke other code 
+'''
 
 def read_test_parameters():
     tests = []
@@ -44,19 +49,20 @@ def read_test_parameters():
         tests.append(temp_test)
     return tests
 
-
-def check_result(test, answer):
-    if test.precision == "exact":
-        precision = 0.0
-    else:
-        precision = float(test.precision)
-
+def test_passed(test):
     CGREEN  = '\33[32m'
+    CEND = '\033[0m'
+    output = "Test " + test.name.strip() + " passed!"
+    print CGREEN + output + CEND
+
+def test_failed(test):
     CRED = '\033[91m'
     CEND = '\033[0m'
-    if abs(float(answer) - float(test.expected_result)) <= precision:
-        output = "Test " + test.name.strip() + " passed!"
-        print CGREEN + output + CEND
+    if test.precision == "greater" or test.precision == "less":
+        output = "Test " + test.name + " failed.\n"
+        output += "Expected answer: " + test.expected_result + "\n"
+        output += "Actual answer: " + answer 
+        print  CRED + output + CEND
     else:
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
@@ -64,21 +70,53 @@ def check_result(test, answer):
         output += "Actual answer: " + answer
         print  CRED + output + CEND
 
+def check_result(test, answer):
+    if test.precision == "exact":
+        precision = 0.0
+    elif test.precision == "less":
+        if answer < expected_result:
+            test_passed(test)
+        else:
+            test_failed(test)
+    elif test.precision == "greater":
+        if answer > expected_result:
+            test_passed(test)
+        else:
+            test_failed(test)
+    else:
+        precision = float(test.precision)
+
+
+    if abs(float(answer) - float(test.expected_result)) <= precision:
+        test_passed(test)
+    elif str(test.answer) == "FAIL_SUBPROCESS":
+        print CRED + "Test failed due to subprocess error-- is mpmc_testing in the right directory?" + CEND
+    else:
+        test_failed(test)
 
 #Run the tests. We choose only the first match of a search string and find the
 #first floating point number after the match as result due to how MPMC is built: we can't
 #run 0 steps (i.e, output the initial system without outputting the first move after.)
+
+#def check_mpmc_exists(executable):
+#TODO: implement this
 
 
 def run_test(test):
     #TODO: generate these paths dynamically
     #exe is two directories up because when we cd down we're one dir further from the exe
     mpmc_exe = '../../build/mpmc'
-    test_dir = 'inputs/'
+    #check_mpmc_exists(mpmc_exe) #exit here if MPMC executable provided is not correct
+    test_dir = 'inputs'
     input_file = test.input_file
     cwd = os.getcwd()
     os.chdir(test_dir)
-    out = subprocess.check_output([mpmc_exe, input_file])
+    try:
+        out = subprocess.check_output([mpmc_exe, input_file]) 
+    except:
+        out = "FAIL_SUBPROCESS"
+        return
+
     out = out.decode("ascii", errors="ignore")
     #stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
     numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
