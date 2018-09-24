@@ -8,7 +8,7 @@ Each test needs three files:
  - An *MPMC input file*, in the `inputs/` directory, and
  - A *pqr file*, also in the `inputs/` directory.
  
- ### Description Files 
+### Description Files 
  The following would be found in `tests/example.txt`:
  
     name example
@@ -17,8 +17,17 @@ Each test needs three files:
     term OUTPUT: example energy
     output 12345.6789
     precision exact
-Note that a `precision` of `exact` is the same as setting the precision to `0.0`. `example.inp` and `example.pqr` are both in the `inputs/` directory, as noted above.
-For comparisons, use `less` or `greater` as needed. Less (or greater) than or equal to are not supported as of this time.
+
+`example.inp` and `example.pqr` are both in the `inputs/` directory, as noted above.
+
+### Notes on test options
+A `precision` of `exact` is the same as setting the precision to `0.0`.
+For comparisons, use `less` or `greater` as needed. Less (or greater) than or equal to are not supported
+as of this time.
+If you want to find the LAST occurrence of your search string, use `search reverse` in your input. This 
+is useful for testing properties at equilibrium or for tests that require simulations to be run for some
+amount of time before the result we want will pop out.
+
 ### Input/PQR Files
 If you're writing tests for MPMC, you should know what these are. Nonetheless, you can look at examples in `sample_configs/`  contained in the main `mpmc` directory if you want some inspiration.
 

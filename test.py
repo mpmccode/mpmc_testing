@@ -17,6 +17,7 @@ class Test():
         self.search_string = ""
         self.expected_result = None
         self.precision = None
+        self.search = ""
 
 
 '''
@@ -45,6 +46,8 @@ def read_test_parameters():
                 temp_test.expected_result = line.split(' ', 1)[1].strip()
             elif re.search("precision", line):
                 temp_test.precision = line.split(' ', 1)[1].strip()
+            elif re.search("search", line):
+                temp_test.search = line.split(' ', 1)[1].strip()
             else:
                 print "Found unsupported option in file ", path
                 print line
@@ -134,7 +137,7 @@ def run_test(test):
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
     except:
-        out = "FAIL_SUBPROCESS"
+        test_answer = "FAIL_SUBPROCESS"
         return
 
     out = out.decode("ascii", errors="ignore")
@@ -142,7 +145,10 @@ def run_test(test):
     numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
     #probably doesn't need to be done each time this function is called
     rx = re.compile(numeric_const_pattern, re.VERBOSE)
-    for line in out.splitlines():
+    output = out.splitlines()
+    if test.search == "reverse":
+        output.reverse()
+    for line in output:
         term = test.search_string
         if term in line:
             result = rx.findall(line)[0]
