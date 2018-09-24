@@ -137,7 +137,7 @@ def run_test(test):
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
     except:
-        test_answer = "FAIL_SUBPROCESS"
+        test.answer = "FAIL_SUBPROCESS"
         return
 
     out = out.decode("ascii", errors="ignore")
