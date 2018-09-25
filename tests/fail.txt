@@ -1,6 +1,6 @@
-name failure
+name THIS_TEST_SHOULD_ALWAYS_FAIL
 input failure.inp
 pqr failure.pqr
 term OUTPUT: electrostatic energy
-output 2.2
-precision 0.015
+output 69
+precision 420
