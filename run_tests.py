@@ -174,6 +174,7 @@ def cleanup():
 
 def main():
     tests = read_test_parameters()
+    print tests
     for test in tests:
         run_test(test)
     cleanup()  # clean up, everybody clean up!
