@@ -32,8 +32,12 @@ def read_test_parameters():
         path = tests_dir + "/" + test
         temp_test = Test()
         for line in open(path, "r"):
-            if line[0] == '#':
+            if line[0] == '#' or line.isspace():
                 continue
+            if len(line.split()) == 1:
+                print("Missing option or syntax error in test {}:".format(test))
+                print(line)
+                exit(1) #quit here, don't try to handle groups of tests that include a broken one
             if re.search("name", line):
                 temp_test.name = line.split(' ', 1)[1].strip()
             elif re.search("input", line):
@@ -49,7 +53,7 @@ def read_test_parameters():
             elif re.search("search", line):
                 temp_test.search = line.split(' ', 1)[1].strip()
             else:
-                print("Found unsupported option in file {}".format(path))
+                print("Found unsupported option in file {}:".format(path))
                 print(line)
         tests.append(temp_test)
     return tests
@@ -82,6 +86,18 @@ def check_result(test, answer):
     if test.precision == "exact":
         precision = 0.0
     elif test.precision == "less":
+        if answer < test.expected_result:
+            test_passed(test)
+        else:
+            test_failed(test, answer)
+        return  # exit here
+    elif test.precision == "more":
+        if answer > test.expected_result:
+            test_passed(test)
+        else:
+            test_failed(test, answer)
+        return  # exit here
+    elif test.precision == "lesser":
         if answer <= test.expected_result:
             test_passed(test)
         else:
@@ -137,7 +153,7 @@ def run_test(test):
     check_mpmc_exists(mpmc_exe)  # exit here if MPMC executable provided is not correct
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
-    except:
+    except subprocess.CalledProcessError:
         print("subprocess returned an error for test {}".format(test.name))
         os.chdir(cwd)
         return
