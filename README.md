@@ -22,8 +22,8 @@ Each test needs three files:
 
 ### Notes on test options
 A `precision` of `exact` is the same as setting the precision to `0.0`.
-For comparisons, use `less` or `greater` as needed. Less (or greater) than or equal to are not supported
-as of this time.
+For comparisons, use `less` or `greater` as needed. These are respectively
+equivalent to "less than" and "greater than."
 If you want to find the LAST occurrence of your search string, use `search reverse` in your input. This 
 is useful for testing properties at equilibrium or for tests that require simulations to be run for some
 amount of time before the result we want will pop out.

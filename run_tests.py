@@ -79,18 +79,16 @@ def test_failed(test, answer):
 
 
 def check_result(test, answer):
-    precision = None
-    print(test.precision)
     if test.precision == "exact":
         precision = 0.0
     elif test.precision == "less":
-        if answer < test.expected_result:
+        if answer <= test.expected_result:
             test_passed(test)
         else:
             test_failed(test, answer)
         return  # exit here
     elif test.precision == "greater":
-        if answer > test.expected_result:
+        if answer >= test.expected_result:
             test_passed(test)
         else:
             test_failed(test, answer)
