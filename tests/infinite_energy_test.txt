@@ -3,4 +3,5 @@ input infinite_energy.inp
 pqr infinite_energy.pqr
 term OUTPUT: repulsion/dispersion energy
 output 10000000000 
-precision exact
+precision greater
+

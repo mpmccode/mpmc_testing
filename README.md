@@ -32,5 +32,8 @@ amount of time before the result we want will pop out.
 If you're writing tests for MPMC, you should know what these are. Nonetheless, you can look at examples in `sample_configs/`  contained in the main `mpmc` directory if you want some inspiration.
 
 ### Running tests
-At the moment, the test runner expects the mpmc_testing directory to be inside the main `mpmc` directory, with
-the `mpmc` executable itself being in `mpmc/build/`
+The test runner expects the mpmc_testing directory to be inside the main `mpmc` directory, with
+the `mpmc` executable itself being in `mpmc/build/`.
+
+`mpmc` must be compiled for `Release` before running the tests. Just run `bash compile.sh` from
+the MPMC directory root to accomplish this.

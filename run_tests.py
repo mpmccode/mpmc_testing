@@ -80,6 +80,7 @@ def test_failed(test, answer):
 
 def check_result(test, answer):
     precision = None
+    print(test.precision)
     if test.precision == "exact":
         precision = 0.0
     elif test.precision == "less":
@@ -87,15 +88,18 @@ def check_result(test, answer):
             test_passed(test)
         else:
             test_failed(test, answer)
+        return  # exit here
     elif test.precision == "greater":
         if answer > test.expected_result:
             test_passed(test)
         else:
             test_failed(test, answer)
+        return  # exit here
     else:
         precision = float(test.precision)
 
-    if abs(float(answer) - float(test.expected_result)) <= precision:
+    delta = (float(answer) - float(test.expected_result))
+    if abs(delta) <= precision:
         test_passed(test)
     else:
         test_failed(test, answer)
@@ -136,8 +140,9 @@ def run_test(test):
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
     except:
-        print("subprocess returned an error, exiting")
-        sys.exit()
+        print("subprocess returned an error for test {}".format(test.name))
+        os.chdir(cwd)
+        return
 
     out = out.decode("ascii", errors="ignore")
     # stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
