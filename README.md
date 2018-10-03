@@ -1,6 +1,6 @@
 # MPMC Tests
-This directory contains the tests, test inputs, and test runner (`test.py`) for [MPMC](https://github.com/mpmccode/mpmc). This program should run fine on any modern python installation.
-
+This directory contains the tests, test inputs, and test runner (`test.py`) for [MPMC](https://github.com/mpmccode/mpmc).
+The only dependancy is Python 3.
 ## How to write tests
 Each test needs three files:
 
