@@ -145,12 +145,11 @@ def check_mpmc_exists(executable):
 
 
 def run_test(test):
-    # TODO: generate these paths dynamically
     test_dir = 'inputs'
     input_file = test.input_file
     cwd = os.getcwd()
     os.chdir(test_dir)
-    mpmc_exe = '../../build/mpmc'
+    mpmc_exe = '../../build/mpmc' # it should always be here
     check_mpmc_exists(mpmc_exe)  # exit here if MPMC executable provided is not correct
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
