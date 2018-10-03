@@ -20,11 +20,6 @@ class Test:
         self.search = ""
 
 
-"""
-Get our params and strip newlines wherever they broke other code 
-"""
-
-
 def read_test_parameters():
     tests = []
     tests_dir = 'tests'
@@ -35,9 +30,9 @@ def read_test_parameters():
             if line[0] == '#' or line.isspace():
                 continue
             if len(line.split()) == 1:
-                print("Missing option or syntax error in test {}:".format(test))
+                print(f"Missing option or syntax error in test {test}:")
                 print(line)
-                exit(1) #quit here, don't try to handle groups of tests that include a broken one
+                exit(1)  # quit here, don't try to handle groups of tests that include a broken one
             if re.search("name", line):
                 temp_test.name = line.split(' ', 1)[1].strip()
             elif re.search("input", line):
@@ -53,70 +48,71 @@ def read_test_parameters():
             elif re.search("search", line):
                 temp_test.search = line.split(' ', 1)[1].strip()
             else:
-                print("Found unsupported option in file {}:".format(path))
+                print(f"Found unsupported option in file {path}:")
                 print(line)
         tests.append(temp_test)
     return tests
 
 
 def test_passed(test):
-    cgreen = '\33[32m'
-    cend = '\033[0m'
+    green = '\33[32m'
+    end = '\033[0m'
     output = "Test " + test.name.strip() + " passed!"
-    print(cgreen + output + cend)
+    print(f"{green}{output}{end}")
 
 
 def test_failed(test, answer):
-    cred = '\033[91m'
-    cend = '\033[0m'
-    if test.precision == "greater" or test.precision == "less":
+    red = '\033[91m'
+    end = '\033[0m'
+    if test.precision in {"less", "more", "lesser", "greater"}:
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + "\n"
         output += "Actual answer: " + answer
-        print(cred + output + cend)
     else:
         output = "Test " + test.name + " failed.\n"
         output += "Expected answer: " + test.expected_result + " with precision of " + str(
             test.precision) + "\n"
         output += "Actual answer: " + answer
-        print(cred + output + cend)
+    print(f"{red}{output}{end}")
+
+
+'''
+handle_non_exact_answer() deals with tests whose precision is not set to "exact"
+or a numerical value.
+return True if we handled a test with this function (i.e. test.precision was set
+to an allowed non-"exact" value, false otherwise
+'''
+
+
+def handle_non_exact_answer(test, answer):
+    if test.precision not in {"less", "more", "lesser", "greater"}:
+        return False
+    else:
+        if test.precision == "less" and answer < test.expected_result:
+            test_passed(test)
+        elif test.precision == "more" and answer > test.expected_result:
+            test_passed(test)
+        elif test.precision == "lesser" and answer <= test.expected_result:
+            test_passed(test)
+        elif test.precision == "greater" and answer >= test.expected_result:
+            test_passed(test)
+        else:
+            test_failed(test, answer)
+    return True
 
 
 def check_result(test, answer):
-    if test.precision == "exact":
-        precision = 0.0
-    elif test.precision == "less":
-        if answer < test.expected_result:
-            test_passed(test)
+    if not handle_non_exact_answer(test, answer):
+        if test.precision == "exact":
+            precision = 0.0
         else:
-            test_failed(test, answer)
-        return  # exit here
-    elif test.precision == "more":
-        if answer > test.expected_result:
-            test_passed(test)
-        else:
-            test_failed(test, answer)
-        return  # exit here
-    elif test.precision == "lesser":
-        if answer <= test.expected_result:
-            test_passed(test)
-        else:
-            test_failed(test, answer)
-        return  # exit here
-    elif test.precision == "greater":
-        if answer >= test.expected_result:
-            test_passed(test)
-        else:
-            test_failed(test, answer)
-        return  # exit here
-    else:
-        precision = float(test.precision)
+            precision = float(test.precision)
 
-    delta = (float(answer) - float(test.expected_result))
-    if abs(delta) <= precision:
-        test_passed(test)
-    else:
-        test_failed(test, answer)
+        delta = (float(answer) - float(test.expected_result))
+        if abs(delta) <= precision:
+            test_passed(test)
+        else:
+            test_failed(test, answer)
 
 
 def run_once(f):
@@ -131,16 +127,21 @@ def run_once(f):
 
 @run_once
 def check_mpmc_exists(executable):
+    blue = '\033[94m'
+    red = '\033[91m'
+    end = '\033[0m'
     if os.path.isfile(os.path.realpath(executable)):
-        print("MPMC executable found, continuing...")
+        print(f"{blue} MPMC executable found, continuing...{end}")
     else:
-        print("MPMC executable not found, halting program execution")
+        print(f"{red}MPMC executable not found, halting program execution.{end}")
         sys.exit()
 
 
-# Run the tests. We choose only the first match of a search string and find the
-# first floating point number after the match as result due to how MPMC is built: we can't
-# run 0 steps (i.e, output the initial system without outputting the first move after.)
+'''
+ Run the tests. We choose only the first match of a search string and find the
+ first floating point number after the match as result due to how MPMC is built: we can't
+ run 0 steps (i.e, output the initial system without outputting the first move after.)
+'''
 
 
 def run_test(test):
@@ -176,13 +177,17 @@ def run_test(test):
     os.chdir(cwd)
 
 
-# remove garbage in case the test writer forgets to redirect MPMC output to /dev/null in their input script
+'''
+remove garbage in case the test writer forgets to redirect MPMC output to /dev/null in their input script
+'''
+
+
 def cleanup():
     test_dir = 'inputs/'
     cwd = os.getcwd()
     os.chdir(test_dir)
     # using shell=True is a bit dangerous here, but it's the only way (as far as I can tell) to
-    # have subprocess evaluate wildcards properly -L
+    # have subprocess evaluate wildcards properly. handle with care. -L
     subprocess.call(
         "rm *.dat *.last *.restart.* *.traj* *.energy* *.final*",
         shell=True,
