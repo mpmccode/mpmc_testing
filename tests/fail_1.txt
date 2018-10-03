@@ -1,0 +1,6 @@
+name canary_1:exact
+input failure.inp
+pqr failure.pqr
+term OUTPUT: electrostatic energy
+output 99999999999999999999
+precision greater

@@ -1,6 +1,6 @@
-name THIS_TEST_SHOULD_ALWAYS_FAIL
+name canary_3:lesser
 input failure.inp
 pqr failure.pqr
 term OUTPUT: electrostatic energy
-output 69
-precision 420
+output -99999999999999999999
+precision lesser
