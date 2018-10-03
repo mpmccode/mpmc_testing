@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 """
 Runs MPMC tests as defined in the README
 """
@@ -30,7 +31,7 @@ def read_test_parameters():
             if line[0] == '#' or line.isspace():
                 continue
             if len(line.split()) == 1:
-                print(f"Missing option or syntax error in test {test}:")
+                print("Missing option or syntax error in this line:")
                 print(line)
                 exit(1)  # quit here, don't try to handle groups of tests that include a broken one
             if re.search("name", line):
