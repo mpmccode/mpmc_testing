@@ -104,12 +104,12 @@ def handle_non_exact_answer(test, answer):
 
 def check_result(test, answer):
     if not handle_non_exact_answer(test, answer):
+        delta = (float(answer) - float(test.expected_result))
         if test.precision == "exact":
             precision = 0.0
         else:
             precision = float(test.precision)
 
-        delta = (float(answer) - float(test.expected_result))
         if abs(delta) <= precision:
             test_passed(test)
         else:
@@ -146,6 +146,11 @@ def check_mpmc_exists(executable):
 
 
 def run_test(test):
+    if "canary" in test.name and len(sys.argv) == 1:
+        return
+    # ok so what's the deal with this canary business? Basically, they're tests that should *always* fail
+    # unless there's a bug in run_tests.py itself. The only person that would ever want them to run is
+    # me, so we hide them for the good of the end user
     test_dir = 'inputs'
     input_file = test.input_file
     cwd = os.getcwd()
