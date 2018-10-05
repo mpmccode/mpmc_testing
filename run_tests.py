@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 """
 Runs MPMC tests as defined in the README
 """
@@ -33,7 +33,7 @@ def read_test_parameters():
             if len(line.split()) == 1:
                 print("Missing option or syntax error in this line:")
                 print(line)
-                exit(1)  # quit here, don't try to handle groups of tests that include a broken one
+                exit(1)  # don't try to handle groups of tests that include a broken one
             if re.search("name", line):
                 temp_test.name = line.split(' ', 1)[1].strip()
             elif re.search("input", line):
@@ -132,7 +132,7 @@ def check_mpmc_exists(executable):
     red = '\033[91m'
     end = '\033[0m'
     if os.path.isfile(os.path.realpath(executable)):
-        print(f"{blue} MPMC executable found, continuing...{end}")
+        print(f"{blue}MPMC executable found, continuing...{end}")
     else:
         print(f"{red}MPMC executable not found, halting program execution.{end}")
         sys.exit()
