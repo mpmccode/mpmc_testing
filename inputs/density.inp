@@ -1,0 +1,19 @@
+job_name                    density
+
+ensemble                    uvt
+
+numsteps                    50000
+corrtime                    20
+
+insert_probability          0.667
+move_factor                 1
+rot_factor                  1
+rd_lrc off
+
+temperature                 298
+pressure                    1
+
+read_pqr_box                on
+
+wrapall                     on
+pqr_input                   density.pqr 

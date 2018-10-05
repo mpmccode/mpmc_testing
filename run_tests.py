@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3.6
 """
 Runs MPMC tests as defined in the README
 """
