@@ -1,6 +1,7 @@
 # MPMC Tests
 This repository contains the tests, test inputs, and test runner (`test.py`) for [MPMC](https://github.com/mpmccode/mpmc).
-The only dependency is Python 3, and, of course, MPMC itself.
+
+The only dependencies are Python 3, and, of course, MPMC itself.
 ### How to write tests
 Each test needs three files:
 
@@ -22,7 +23,9 @@ Each test needs three files:
 
 ### Notes on test options
 A `precision` of `exact` is the same as setting the precision to `0.0`.
+
 For comparisons, use `less`(<), `lesser`(<=), `more`(>), or `greater`(>=) as needed.
+
 If you want to find the LAST occurrence of your search string, use `search reverse` in your input. This 
 is useful for testing properties at equilibrium.
 
