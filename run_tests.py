@@ -8,6 +8,7 @@ import os.path
 import re
 import subprocess
 import sys
+import time
 
 
 class Test:
@@ -19,6 +20,10 @@ class Test:
         self.expected_result = None
         self.precision = None
         self.search = ""
+        self.duration = 0.0
+        # initialize duration to non-None type because we sum over all durations in main
+        # this is due to the fact that canary-type tests are only executed if the user asks
+        # for them
 
 
 def read_test_parameters():
@@ -58,22 +63,17 @@ def read_test_parameters():
 def test_passed(test):
     green = '\33[32m'
     end = '\033[0m'
-    output = "Test " + test.name.strip() + " passed!"
-    print(f"{green}{output}{end}")
+    print(f"{green}Test {test.name.strip()} passed in {test.duration}s!{end}")
 
 
 def test_failed(test, answer):
     red = '\033[91m'
     end = '\033[0m'
-    if test.precision in {"less", "more", "lesser", "greater"}:
-        output = "Test " + test.name + " failed.\n"
-        output += "Expected answer: " + test.expected_result + "\n"
-        output += "Actual answer: " + answer
-    else:
-        output = "Test " + test.name + " failed.\n"
-        output += "Expected answer: " + test.expected_result + " with precision of " + str(
-            test.precision) + "\n"
-        output += "Actual answer: " + answer
+    output = "Test " + test.name + " failed in " + str(test.duration) + "s.\n"
+    output += "Expected answer: " + test.expected_result
+    if test.precision not in {"less", "more", "lesser", "greater"}:  # numerical precision
+        output += " with precision of " + str(test.precision)
+    output += "\nActual answer: " + answer
     print(f"{red}{output}{end}")
 
 
@@ -155,14 +155,17 @@ def run_test(test):
     input_file = test.input_file
     cwd = os.getcwd()
     os.chdir(test_dir)
-    mpmc_exe = '../../build/mpmc' # it should always be here
+    mpmc_exe = '../../build/mpmc'  # it should always be here
     check_mpmc_exists(mpmc_exe)  # exit here if MPMC executable provided is not correct
+    test_start = time.time()
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
     except subprocess.CalledProcessError:
         print("subprocess returned an error for test {}".format(test.name))
         os.chdir(cwd)
         return
+    test_end = time.time()
+    test.duration = round(test_end - test_start, 3)
 
     out = out.decode("ascii", errors="ignore")
     # stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
@@ -202,10 +205,16 @@ def cleanup():
 
 
 def main():
+    blue = '\033[94m'
+    end = '\033[0m'
     tests = read_test_parameters()
     for test in tests:
         run_test(test)
+
+    total_time = round(sum(test.duration for test in tests),3)
+
     cleanup()  # clean up, everybody clean up!
+    print(f"{blue}All done! This run took {total_time} seconds.{end}")
 
 
 if __name__ == '__main__':
