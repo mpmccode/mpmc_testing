@@ -2,7 +2,7 @@ job_name                    density
 
 ensemble                    uvt
 
-numsteps                    50000
+numsteps                    100000
 corrtime                    20
 
 insert_probability          0.667
