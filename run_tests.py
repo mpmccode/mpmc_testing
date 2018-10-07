@@ -1,4 +1,3 @@
-#!/usr/bin/python3.6
 """
 Runs MPMC tests as defined in the README
 """
@@ -38,7 +37,9 @@ def read_test_parameters():
             if len(line.split()) == 1:
                 print("Missing option or syntax error in this line:")
                 print(line)
-                exit(1)  # don't try to handle groups of tests that include a broken one
+                exit(
+                    1
+                )  # don't try to handle groups of tests that include a broken one
             if re.search("name", line):
                 temp_test.name = line.split(' ', 1)[1].strip()
             elif re.search("input", line):
@@ -71,7 +72,8 @@ def test_failed(test, answer):
     end = '\033[0m'
     output = "Test " + test.name + " failed in " + str(test.duration) + "s.\n"
     output += "Expected answer: " + test.expected_result
-    if test.precision not in {"less", "more", "lesser", "greater"}:  # numerical precision
+    if test.precision not in {"less", "more", "lesser",
+                              "greater"}:  # numerical precision
         output += " with precision of " + str(test.precision)
     output += "\nActual answer: " + answer
     print(f"{red}{output}{end}")
@@ -134,7 +136,8 @@ def check_mpmc_exists(executable):
     if os.path.isfile(os.path.realpath(executable)):
         print(f"{blue}MPMC executable found, continuing...{end}")
     else:
-        print(f"{red}MPMC executable not found, halting program execution.{end}")
+        print(
+            f"{red}MPMC executable not found, halting program execution.{end}")
         sys.exit()
 
 
@@ -156,7 +159,8 @@ def run_test(test):
     cwd = os.getcwd()
     os.chdir(test_dir)
     mpmc_exe = '../../build/mpmc'  # it should always be here
-    check_mpmc_exists(mpmc_exe)  # exit here if MPMC executable provided is not correct
+    check_mpmc_exists(
+        mpmc_exe)  # exit here if MPMC executable provided is not correct
     test_start = time.time()
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
@@ -211,7 +215,7 @@ def main():
     for test in tests:
         run_test(test)
 
-    total_time = round(sum(test.duration for test in tests),3)
+    total_time = round(sum(test.duration for test in tests), 3)
 
     cleanup()  # clean up, everybody clean up!
     print(f"{blue}All done! This run took {total_time} seconds.{end}")
