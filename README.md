@@ -1,7 +1,7 @@
 # MPMC Tests
 This repository contains the tests, test inputs, and test runner (`test.py`) for [MPMC](https://github.com/mpmccode/mpmc).
 
-The only dependencies are Python 3, and, of course, MPMC itself.
+The only dependencies are Python 3.6 or newer, and, of course, MPMC itself.
 ### How to Write Tests
 Each test needs three files:
 
@@ -51,6 +51,6 @@ mpmc_commits.txt. To generate this file, `cd` into your local MPMC install, and 
     git rev-list master > mpmc_commits.txt
 
 We recommend copying `test_all_commits.sh` and `mpmc_commits.txt` into your home directory, and
-then run `bash test_all_commits.sh`. This will execute two `git clone`s and run the entire
+then running `bash test_all_commits.sh`. This will execute two `git clone`s and run the entire
 test suite for each MPMC commit; expect it to take some time.
 
