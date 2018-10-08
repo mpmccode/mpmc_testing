@@ -2,8 +2,6 @@
 This repository contains the tests, test inputs, and test runner (`test.py`) 
 for [MPMC](https://github.com/mpmccode/mpmc).
 
-The only dependencies are Python 3.6, and, of course, MPMC itself.
-=======
 The only dependencies are Python 3.6 or newer, and, of course, MPMC itself.
 ### How to Write Tests
 Each test needs three files:
