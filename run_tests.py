@@ -14,11 +14,11 @@ run_parallel = True
 try:
     import joblib
 except ImportError:
-    parallel=False
+    parallel = False
 try:
     import multiprocessing
 except ImportError:
-    parallel=False
+    parallel = False
 
 
 class Test:
@@ -219,7 +219,8 @@ def cleanup():
 
 def main():
     mpmc_exe = '../build/mpmc'  # it should always be here
-    check_mpmc_exists(mpmc_exe)  # exit here if MPMC executable provided is not correct
+    check_mpmc_exists(
+        mpmc_exe)  # exit here if MPMC executable provided is not correct
     blue = '\033[94m'
     yellow = '\033[33m'
     end = '\033[0m'
@@ -227,9 +228,12 @@ def main():
     tests = read_test_parameters()
 
     if run_parallel:
-        print(f"{yellow}Running tests in parallel...{end}")
         num_cores = multiprocessing.cpu_count()
-        joblib.Parallel(n_jobs=num_cores)(joblib.delayed(run_test)(test) for test in tests)
+        print(
+            f"{yellow}Running tests in parallel with {num_cores} cores available...{end}"
+        )
+        joblib.Parallel(n_jobs=num_cores)(
+            joblib.delayed(run_test)(test) for test in tests)
     else:
         print(f"{yellow}Running tests serially...{end}")
         for test in tests:
