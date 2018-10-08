@@ -69,11 +69,6 @@ then:
 
     git rev-list master > mpmc_commits.txt
 
-We recommend copying `test_all_commits.sh` and `mpmc_commits.txt` into your 
-home directory, and
-then run `bash test_all_commits.sh`. This will execute two `git clone`s and run 
-the entire
-=======
 We recommend copying `test_all_commits.sh` and `mpmc_commits.txt` into your home directory, and
 then running `bash test_all_commits.sh`. This will execute two `git clone`s and run the entire
 test suite for each MPMC commit; expect it to take some time.
