@@ -14,11 +14,7 @@ run_parallel = True
 try:
     import joblib
 except ImportError:
-    parallel = False
-try:
-    import multiprocessing
-except ImportError:
-    parallel = False
+    run_parallel = False
 
 
 class Test:
