@@ -9,6 +9,17 @@ import subprocess
 import sys
 import time
 
+run_parallel = True
+
+try:
+    import joblib
+except ImportError:
+    parallel=False
+try:
+    import multiprocessing
+except ImportError:
+    parallel=False
+
 
 class Test:
     def __init__(self):
@@ -159,8 +170,6 @@ def run_test(test):
     cwd = os.getcwd()
     os.chdir(test_dir)
     mpmc_exe = '../../build/mpmc'  # it should always be here
-    check_mpmc_exists(
-        mpmc_exe)  # exit here if MPMC executable provided is not correct
     test_start = time.time()
     try:
         out = subprocess.check_output([mpmc_exe, input_file])
@@ -209,11 +218,22 @@ def cleanup():
 
 
 def main():
+    mpmc_exe = '../build/mpmc'  # it should always be here
+    check_mpmc_exists(mpmc_exe)  # exit here if MPMC executable provided is not correct
     blue = '\033[94m'
+    yellow = '\033[33m'
     end = '\033[0m'
+
     tests = read_test_parameters()
-    for test in tests:
-        run_test(test)
+
+    if run_parallel:
+        print(f"{yellow}Running tests in parallel...{end}")
+        num_cores = multiprocessing.cpu_count()
+        joblib.Parallel(n_jobs=num_cores)(joblib.delayed(run_test)(test) for test in tests)
+    else:
+        print(f"{yellow}Running tests serially...{end}")
+        for test in tests:
+            run_test(test)
 
     total_time = round(sum(test.duration for test in tests), 3)
 
