@@ -8,6 +8,7 @@ import re
 import subprocess
 import sys
 import time
+import multiprocessing
 
 run_parallel = True
 
@@ -26,7 +27,7 @@ class Test:
         self.expected_result = None
         self.precision = None
         self.search = ""
-        self.duration = 0.0
+        self.duration = None
         # initialize duration to non-None type because we sum over all durations in main
         # this is due to the fact that canary-type tests are only executed if the user asks
         # for them
@@ -214,6 +215,7 @@ def cleanup():
 
 
 def main():
+    start_time = time.time()
     mpmc_exe = '../build/mpmc'  # it should always be here
     check_mpmc_exists(
         mpmc_exe)  # exit here if MPMC executable provided is not correct
@@ -235,9 +237,13 @@ def main():
         for test in tests:
             run_test(test)
 
-    total_time = round(sum(test.duration for test in tests), 3)
+    #currently broken, not sure what's going on here
+    #SO Q here: https://stackoverflow.com/questions/52710827/time-time-library-returns-unexpected-result-when-using-joblib
+    #total_time = sum(test.duration for test in tests if test.duration is not None)
 
     cleanup()  # clean up, everybody clean up!
+    end_time = time.time()
+    total_time = round(end_time - start_time,3)
     print(f"{blue}All done! This run took {total_time} seconds.{end}")
 
 
