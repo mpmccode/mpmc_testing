@@ -9,13 +9,13 @@ import subprocess
 import sys
 import time
 import multiprocessing
+import argparse
 
-run_parallel = True
-
+RUN_PARALLEL = True
 try:
     import joblib
 except ImportError:
-    run_parallel = False
+    RUN_PARALLEL = False
 
 
 class Test:
@@ -27,10 +27,53 @@ class Test:
         self.expected_result = None
         self.precision = None
         self.search = ""
-        self.duration = None
-        # initialize duration to non-None type because we sum over all durations in main
-        # this is due to the fact that canary-type tests are only executed if the user asks
-        # for them
+        self.duration = 0.0
+        self.start = None
+
+    '''
+    Run the test. We choose only the first match of a search string and find the
+    first floating point number after the match as result due to how MPMC is built: we can't
+    run 0 steps (i.e, output the initial system without outputting the first move after.)
+    '''
+
+    def run(self, args):
+        if not args.canaries and "canary" in self.name:
+            return self.duration
+        # ok so what's the deal with this canary business? Basically, they're tests that should *always* fail
+        # unless there's a bug in run_tests.py itself. The only person that would ever want them to run is
+        # me, so we hide them for the good of the end user
+        test_dir = 'inputs'
+        input_file = self.input_file
+        cwd = os.getcwd()
+        os.chdir(test_dir)
+        mpmc_exe = '../../build/mpmc'  # it should always be here
+        self.start = time.perf_counter()
+        try:
+            out = subprocess.check_output([mpmc_exe, input_file])
+        except subprocess.CalledProcessError:
+            print("subprocess returned an error for test {}".format(test.name))
+            os.chdir(cwd)
+            return None
+        _end = time.perf_counter()
+        self.duration = round((_end - self.start), 3)
+
+        out = out.decode("ascii", errors="ignore")
+        # stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
+        numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
+        # probably doesn't need to be done each time this function is called
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        output = out.splitlines()
+        result = None
+        if self.search == "reverse":
+            output.reverse()
+        for line in output:
+            term = self.search_string
+            if term in line:
+                result = rx.findall(line)[0]
+                break
+        check_result(self, result)
+        os.chdir(cwd)
+        return self.duration
 
 
 def read_test_parameters():
@@ -63,7 +106,7 @@ def read_test_parameters():
             elif re.search("search", line):
                 temp_test.search = line.split(' ', 1)[1].strip()
             else:
-                print(f"Found unsupported option in file {path}:")
+                print(f"Found unsupported option {line} in file {path}:")
                 print(line)
         tests.append(temp_test)
     return tests
@@ -150,52 +193,6 @@ def check_mpmc_exists(executable):
 
 
 '''
- Run the tests. We choose only the first match of a search string and find the
- first floating point number after the match as result due to how MPMC is built: we can't
- run 0 steps (i.e, output the initial system without outputting the first move after.)
-'''
-
-
-def run_test(test):
-    if "canary" in test.name and len(sys.argv) == 1:
-        return
-    # ok so what's the deal with this canary business? Basically, they're tests that should *always* fail
-    # unless there's a bug in run_tests.py itself. The only person that would ever want them to run is
-    # me, so we hide them for the good of the end user
-    test_dir = 'inputs'
-    input_file = test.input_file
-    cwd = os.getcwd()
-    os.chdir(test_dir)
-    mpmc_exe = '../../build/mpmc'  # it should always be here
-    test_start = time.time()
-    try:
-        out = subprocess.check_output([mpmc_exe, input_file])
-    except subprocess.CalledProcessError:
-        print("subprocess returned an error for test {}".format(test.name))
-        os.chdir(cwd)
-        return
-    test_end = time.time()
-    test.duration = round(test_end - test_start, 3)
-
-    out = out.decode("ascii", errors="ignore")
-    # stole this next line from SO, I can't read regex yet so all I know is it gets the numbers from the goop
-    numeric_const_pattern = '[-+]? (?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ ) ?'
-    # probably doesn't need to be done each time this function is called
-    rx = re.compile(numeric_const_pattern, re.VERBOSE)
-    output = out.splitlines()
-    result = None
-    if test.search == "reverse":
-        output.reverse()
-    for line in output:
-        term = test.search_string
-        if term in line:
-            result = rx.findall(line)[0]
-            break
-    check_result(test, result)
-    os.chdir(cwd)
-
-
-'''
 remove garbage in case the test writer forgets to redirect MPMC output to /dev/null in their input script
 '''
 
@@ -214,8 +211,11 @@ def cleanup():
     os.chdir(cwd)
 
 
+def make_test(test, args):
+    return test.run(args)
+
+
 def main():
-    start_time = time.time()
     mpmc_exe = '../build/mpmc'  # it should always be here
     check_mpmc_exists(
         mpmc_exe)  # exit here if MPMC executable provided is not correct
@@ -223,27 +223,41 @@ def main():
     yellow = '\033[33m'
     end = '\033[0m'
 
+    parser = argparse.ArgumentParser(description='Run MPMC Tests...')
+    parser.add_argument(
+        '--canaries',
+        action='store_true',
+        help='a flag to ask for the run_tests.py canaries to be ran',
+        default=False)
+    parser.add_argument(
+        '--serial',
+        action='store_true',
+        help='force run_tests.py to run in serial',
+        default=False)
+
+    args = parser.parse_args()
+
+    global RUN_PARALLEL
+    if args.serial:
+        RUN_PARALLEL = False
+
     tests = read_test_parameters()
 
-    if run_parallel:
+    if RUN_PARALLEL:
         num_cores = multiprocessing.cpu_count()
         print(
             f"{yellow}Running tests in parallel with {num_cores} cores available...{end}"
         )
-        joblib.Parallel(n_jobs=num_cores)(
-            joblib.delayed(run_test)(test) for test in tests)
+        jobs = joblib.Parallel(n_jobs=num_cores)(
+            joblib.delayed(make_test)(test, args) for test in tests)
+        total_time = round(sum(job for job in jobs), 3)
     else:
         print(f"{yellow}Running tests serially...{end}")
         for test in tests:
-            run_test(test)
-
-    #currently broken, not sure what's going on here
-    #SO Q here: https://stackoverflow.com/questions/52710827/time-time-library-returns-unexpected-result-when-using-joblib
-    #total_time = sum(test.duration for test in tests if test.duration is not None)
+            make_test(test, args)
+        total_time = round(sum(test.duration for test in tests), 3)
 
     cleanup()  # clean up, everybody clean up!
-    end_time = time.time()
-    total_time = round(end_time - start_time,3)
     print(f"{blue}All done! This run took {total_time} seconds.{end}")
 
 
