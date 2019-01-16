@@ -1,0 +1,7 @@
+name particles
+input density.inp
+pqr density.pqr
+term OUTPUT: N  
+output 24.4
+precision 0.9
+search reverse

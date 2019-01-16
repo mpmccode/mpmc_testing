@@ -1,0 +1,6 @@
+name pbc
+input pbc.inp
+pqr pbc.pqr
+term OUTPUT: repulsion/dispersion energy
+output -1.78212
+precision exact
