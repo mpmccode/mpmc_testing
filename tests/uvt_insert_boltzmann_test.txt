@@ -1,0 +1,6 @@
+name uvt_insert_boltzmann
+input uvt_insert_boltzmann.inp
+pqr uvt_insert_boltzmann.pqr
+term OUTPUT: BF
+output 8209.1 
+precision exact

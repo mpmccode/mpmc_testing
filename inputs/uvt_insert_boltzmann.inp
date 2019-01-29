@@ -1,11 +1,11 @@
-job_name                    uvt boltzmann displace
+job_name                    uvt_insert_boltzmann
 
 ensemble                    uvt
 
 numsteps                    1
 corrtime                    1
 
-insert_probability          0.667
+insert_probability          1
 move_factor                 1
 rot_factor                  1
 rd_lrc off
@@ -16,6 +16,6 @@ pressure                    1
 read_pqr_box                on
 
 wrapall                     on
-pqr_input                   uvt_displace_boltzmann.pqr
+pqr_input                   uvt_insert_boltzmann.pqr
 
-preset_seeds                1
+preset_seeds                12578
