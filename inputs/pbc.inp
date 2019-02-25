@@ -1,4 +1,4 @@
-job_name                    lenard_jones
+job_name                    pbc
 
 ensemble                    uvt
 
@@ -16,4 +16,4 @@ pressure                    1
 read_pqr_box                on
 
 wrapall                     on
-pqr_input                   lenard_jones.pqr 
+pqr_input                   pbc.pqr 
