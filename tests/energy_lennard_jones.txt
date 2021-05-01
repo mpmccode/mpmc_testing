@@ -1,4 +1,4 @@
-name lennard_jones
+name energy_lennard_jones
 input lennard_jones.inp
 pqr lennard_jones.pqr
 term OUTPUT: repulsion/dispersion energy

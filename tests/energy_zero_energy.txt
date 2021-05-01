@@ -1,4 +1,4 @@
-name zero_energy
+name energy_zero
 input zero_energy.inp
 pqr zero_energy.pqr
 term OUTPUT: potential energy

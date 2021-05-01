@@ -1,4 +1,4 @@
-name phahst_hkust1_traj
+name replay_phahst_hkust1
 input mpmc.inp
 pqr muvt.traj-00000.pqr
 term OUTPUT: potential energy

@@ -1,4 +1,4 @@
-name density
+name uvt_density
 input density.inp
 pqr density.pqr
 term OUTPUT: density

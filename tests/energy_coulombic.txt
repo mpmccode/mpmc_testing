@@ -1,4 +1,4 @@
-name coulombic
+name energy_coulombic
 input coulombic.inp
 pqr coulombic.pqr
 term OUTPUT: electrostatic energy

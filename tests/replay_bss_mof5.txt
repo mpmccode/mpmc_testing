@@ -1,4 +1,4 @@
-name bss_mof5_traj
+name replay_bss_mof5
 input MOF5+BSS.inp
 pqr MOF5+BSS.traj-00000.pqr
 term OUTPUT: potential energy
