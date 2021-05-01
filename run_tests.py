@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
 Runs MPMC tests as defined in the README
 """
