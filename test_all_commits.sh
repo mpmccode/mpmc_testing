@@ -19,6 +19,6 @@ for commit in $(cat mpmc_commits.txt); do
     continue
   fi
   cd ../..
-  #rm -rf ${commit}
+  rm -rf ${commit}
 done
 
