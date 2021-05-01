@@ -1,17 +1,8 @@
 job_name                  polar
 
-ensemble                  uvt
+ensemble                  total_energy
 
-numsteps                  1
-corrtime                  1
-
-insert_probability        0.667
-move_factor               1
-rot_factor                1
 rd_lrc                    off
-
-temperature               298
-pressure                  1
 
 read_pqr_box              on
 
@@ -21,3 +12,6 @@ polarization              on
 
 pqr_output                  /dev/null
 pqr_restart                 /dev/null
+energy_output               /dev/null
+field_output                /dev/null
+dipole_output               /dev/null

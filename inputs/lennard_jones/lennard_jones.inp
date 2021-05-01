@@ -1,4 +1,4 @@
-job_name                    uvt boltzmann displace
+job_name                    lenard_jones
 
 ensemble                    uvt
 
@@ -16,9 +16,7 @@ pressure                    1
 read_pqr_box                on
 
 wrapall                     on
-pqr_input                   uvt_displace_boltzmann.pqr
-
-preset_seeds                1
+pqr_input                   lennard_jones.pqr 
 
 pqr_output                  /dev/null
 pqr_restart                 /dev/null

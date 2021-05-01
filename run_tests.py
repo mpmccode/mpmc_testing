@@ -48,7 +48,8 @@ class Test:
         input_file = self.input_file
         cwd = os.getcwd()
         os.chdir(test_dir)
-        mpmc_exe = '../../build/mpmc'  # it should always be here
+        os.chdir(self.name)
+        mpmc_exe = '../../../build/mpmc'  # it should always be here
         self.start = time.perf_counter()
         try:
             out = subprocess.check_output([mpmc_exe, input_file])
@@ -193,26 +194,6 @@ def check_mpmc_exists(executable):
             f"{red}MPMC executable not found, halting program execution.{end}")
         sys.exit()
 
-
-'''
-remove garbage in case the test writer forgets to redirect MPMC output to /dev/null in their input script
-'''
-
-
-def cleanup():
-    test_dir = 'inputs/'
-    cwd = os.getcwd()
-    os.chdir(test_dir)
-    # using shell=True is a bit dangerous here, but it's the only way (as far as I can tell) to
-    # have subprocess evaluate wildcards properly. handle with care. -L
-    subprocess.call(
-        "rm *.dat *.last *.restart.* *.traj* *.energy* *.final*",
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE)
-    os.chdir(cwd)
-
-
 def make_test(test, args):
     return test.run(args)
 
@@ -259,7 +240,6 @@ def main():
             make_test(test, args)
         total_time = round(sum(test.duration for test in tests), 3)
 
-    cleanup()  # clean up, everybody clean up!
     print(f"{blue}All done! This run took {total_time} seconds.{end}")
 
 

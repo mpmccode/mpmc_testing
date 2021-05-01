@@ -1,6 +1,6 @@
-name polar
+name polar_matrix
 input polar.inp
 pqr polar.pqr
 term OUTPUT: polarization energy
 output -219.13236
-precision 0.002 
+precision 0.002

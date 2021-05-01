@@ -1,11 +1,11 @@
-job_name                    uvt_insert_boltzmann
+job_name                    density
 
 ensemble                    uvt
 
-numsteps                    1
-corrtime                    1
+numsteps                    100000
+corrtime                    20
 
-insert_probability          1
+insert_probability          0.667
 move_factor                 1
 rot_factor                  1
 rd_lrc off
@@ -16,9 +16,8 @@ pressure                    1
 read_pqr_box                on
 
 wrapall                     on
-pqr_input                   uvt_insert_boltzmann.pqr
-
-preset_seeds                12578
+pqr_input                   density.pqr
 
 pqr_output                  /dev/null
 pqr_restart                 /dev/null
+traj_output                 /dev/null

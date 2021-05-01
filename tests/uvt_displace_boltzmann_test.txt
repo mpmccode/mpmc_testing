@@ -1,6 +1,0 @@
-name uvt_displace_boltzmann
-input uvt_displace_boltzmann.inp
-pqr uvt_displace_boltzmann.pqr
-term OUTPUT: BF
-output 0.99701
-precision 0.003
