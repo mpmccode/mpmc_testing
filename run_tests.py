@@ -54,7 +54,7 @@ class Test:
         try:
             out = subprocess.check_output([mpmc_exe, input_file])
         except subprocess.CalledProcessError:
-            print("subprocess returned an error for test {}".format(test.name))
+            print("subprocess returned an error for test {}".format(self.name))
             os.chdir(cwd)
             return None
         _end = time.perf_counter()
