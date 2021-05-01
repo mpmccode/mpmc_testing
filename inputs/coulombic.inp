@@ -15,4 +15,7 @@ pressure                    1
 
 read_pqr_box                on
 
-pqr_input                   coulombic.pqr 
+pqr_input                   coulombic.pqr
+
+pqr_output                  /dev/null
+pqr_restart                 /dev/null

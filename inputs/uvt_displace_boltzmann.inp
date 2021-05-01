@@ -19,3 +19,6 @@ wrapall                     on
 pqr_input                   uvt_displace_boltzmann.pqr
 
 preset_seeds                1
+
+pqr_output                  /dev/null
+pqr_restart                 /dev/null

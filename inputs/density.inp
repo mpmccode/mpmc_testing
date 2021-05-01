@@ -16,4 +16,8 @@ pressure                    1
 read_pqr_box                on
 
 wrapall                     on
-pqr_input                   density.pqr 
+pqr_input                   density.pqr
+
+pqr_output                  /dev/null
+pqr_restart                 /dev/null
+traj_output                 /dev/null

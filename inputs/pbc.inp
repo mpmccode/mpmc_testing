@@ -17,3 +17,6 @@ read_pqr_box                on
 
 wrapall                     on
 pqr_input                   pbc.pqr 
+
+pqr_output                  /dev/null
+pqr_restart                 /dev/null

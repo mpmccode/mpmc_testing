@@ -18,3 +18,6 @@ read_pqr_box              on
 wrapall                   on
 pqr_input                 polar.pqr
 polarization              on
+
+pqr_output                  /dev/null
+pqr_restart                 /dev/null
