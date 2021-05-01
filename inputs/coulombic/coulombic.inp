@@ -1,21 +1,9 @@
 job_name                    coulombic
 
-ensemble                    uvt
-
-numsteps                    1
-corrtime                    1
-
-insert_probability          0.667
-move_factor                 1
-rot_factor                  1
-rd_lrc off
-
-temperature                 298
-pressure                    1
+ensemble                    total_energy
 
 read_pqr_box                on
 
 pqr_input                   coulombic.pqr
 
-pqr_output                  /dev/null
-pqr_restart                 /dev/null
+energy_output               /dev/null

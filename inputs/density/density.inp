@@ -21,3 +21,4 @@ pqr_input                   density.pqr
 pqr_output                  /dev/null
 pqr_restart                 /dev/null
 traj_output                 /dev/null
+energy_output               /dev/null

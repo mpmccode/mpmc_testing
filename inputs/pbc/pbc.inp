@@ -1,22 +1,10 @@
 job_name                    pbc
 
-ensemble                    uvt
-
-numsteps                    1
-corrtime                    1
-
-insert_probability          0.667
-move_factor                 1
-rot_factor                  1
-rd_lrc off
-
-temperature                 298
-pressure                    1
+ensemble                    total_energy
 
 read_pqr_box                on
 
 wrapall                     on
 pqr_input                   pbc.pqr 
 
-pqr_output                  /dev/null
-pqr_restart                 /dev/null
+energy_output               /dev/null

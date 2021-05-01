@@ -1,22 +1,12 @@
-job_name                    lenard_jones
+job_name                    lennard_jones
 
-ensemble                    uvt
+ensemble                    total_energy
 
-numsteps                    1
-corrtime                    1
-
-insert_probability          0.667
-move_factor                 1
-rot_factor                  1
 rd_lrc off
-
-temperature                 298
-pressure                    1
 
 read_pqr_box                on
 
 wrapall                     on
 pqr_input                   lennard_jones.pqr 
 
-pqr_output                  /dev/null
-pqr_restart                 /dev/null
+energy_output               /dev/null

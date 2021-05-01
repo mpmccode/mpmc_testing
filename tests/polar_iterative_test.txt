@@ -1,0 +1,6 @@
+name polar_iterative
+input polar.inp
+pqr polar.pqr
+term OUTPUT: polarization energy
+output -154.13410
+precision 0.002
