@@ -1,0 +1,7 @@
+name phahst_hkust1_traj
+input mpmc.inp
+pqr muvt.traj-00000.pqr
+term OUTPUT: potential energy
+output -6346.87343
+precision 0.002
+search reverse

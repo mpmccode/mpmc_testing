@@ -1,7 +1,3 @@
-*.dat
-*final*
-*restart*
-*traj*
 *.swp
 # Byte-compiled / optimized / DLL files
 __pycache__/

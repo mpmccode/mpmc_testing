@@ -1,0 +1,7 @@
+name bss_mof5_traj
+input MOF5+BSS.inp
+pqr MOF5+BSS.traj-00000.pqr
+term OUTPUT: potential energy
+output -586.25064
+precision 0.002
+search reverse

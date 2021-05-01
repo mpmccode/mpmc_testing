@@ -1,0 +1,28 @@
+job_name                    muvt
+
+ensemble                    replay
+
+disp_expansion              on
+extrapolate_disp_coeffs     on
+damp_dispersion             on
+cavity_autoreject_repulsion 10000
+
+feynman_hibbs              off
+feynman_hibbs_order        4
+
+polarization                on
+polar_damp_type             exponential
+polar_damp                  2.1304
+polar_wolf                  on
+polar_wolf_alpha            0.13
+
+polar_iterative             on
+polar_palmo                 on
+polar_gs_ranked             on
+polar_gamma                 1.03
+polar_precision             0.001
+
+read_pqr_box                on
+traj_input                  muvt.traj-00000.pqr
+energy_output               /dev/null
+
