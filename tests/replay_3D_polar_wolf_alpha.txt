@@ -1,0 +1,8 @@
+name replay_3D_polar_wolf_alpha
+folder replay_3D_chain
+input polar_wolf_alpha.in
+pqr replay.pqr
+term OUTPUT: potential energy
+output -536.51728
+precision 0.002
+search reverse
