@@ -1,4 +1,5 @@
 name energy_coulombic
+folder energy_coulombic
 input coulombic.inp
 pqr coulombic.pqr
 term OUTPUT: electrostatic energy

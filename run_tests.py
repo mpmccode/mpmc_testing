@@ -23,6 +23,7 @@ except ImportError:
 class Test:
     def __init__(self):
         self.name = ""
+        self.folder = ""
         self.input_file = ""
         self.pqr = ""
         self.search_string = ""
@@ -48,7 +49,7 @@ class Test:
         input_file = self.input_file
         cwd = os.getcwd()
         os.chdir(test_dir)
-        os.chdir(self.name)
+        os.chdir(self.folder)
         mpmc_exe = '../../../build/mpmc'  # it should always be here
         self.start = time.perf_counter()
         try:
@@ -96,6 +97,8 @@ def read_test_parameters():
                 )  # don't try to handle groups of tests that include a broken one
             if re.search("name", line):
                 temp_test.name = line.split(' ', 1)[1].strip()
+            elif re.search("folder", line):
+                temp_test.folder = line.split(' ', 1)[1].strip()
             elif re.search("input", line):
                 temp_test.input_file = line.split(' ', 1)[1].strip()
             elif re.search("pqr", line):
@@ -233,7 +236,7 @@ def main():
         )
         jobs = joblib.Parallel(n_jobs=num_cores)(
             joblib.delayed(make_test)(test, args) for test in tests)
-        total_time = round(sum(job for job in jobs), 3)
+        total_time = round(sum((job if job!=None else 0.) for job in jobs), 3)
     else:
         print(f"{yellow}Running tests serially...{end}")
         for test in tests:

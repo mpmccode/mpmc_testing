@@ -1,4 +1,5 @@
 name replay_bssp_mof5
+folder replay_bssp_mof5
 input MOF5+BSSP.inp
 pqr MOF5+BSSP.traj-00000.pqr
 term OUTPUT: potential energy

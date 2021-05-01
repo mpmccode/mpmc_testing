@@ -1,0 +1,8 @@
+name replay_1D_wolf_wolf
+folder replay_1D_chain
+input wolf_wolf.in
+pqr replay.pqr
+term OUTPUT: potential energy
+output 253.16705
+precision 0.002
+search reverse

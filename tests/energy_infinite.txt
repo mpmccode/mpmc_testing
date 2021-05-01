@@ -1,4 +1,5 @@
 name energy_infinite
+folder energy_infinite
 input infinite_energy.inp
 pqr infinite_energy.pqr
 term OUTPUT: repulsion/dispersion energy

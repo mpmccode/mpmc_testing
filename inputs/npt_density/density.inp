@@ -1,11 +1,10 @@
 job_name                    density
 
-ensemble                    uvt
+ensemble                    npt
 
 numsteps                    100000
 corrtime                    50
 
-insert_probability          0.667
 move_factor                 1
 rot_factor                  1
 rd_lrc off

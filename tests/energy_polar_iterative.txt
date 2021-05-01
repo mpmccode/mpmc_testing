@@ -1,4 +1,5 @@
 name energy_polar_iterative
+folder energy_polar_iterative
 input polar.inp
 pqr polar.pqr
 term OUTPUT: polarization energy

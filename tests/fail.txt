@@ -1,4 +1,5 @@
 name canary_1:exact
+folder failure
 input failure.inp
 pqr failure.pqr
 term OUTPUT: electrostatic energy

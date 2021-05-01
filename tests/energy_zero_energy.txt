@@ -1,4 +1,5 @@
 name energy_zero
+folder energy_zero
 input zero_energy.inp
 pqr zero_energy.pqr
 term OUTPUT: potential energy

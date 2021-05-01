@@ -1,0 +1,8 @@
+name replay_1D_polar_ewald
+folder replay_1D_chain
+input polar_ewald.in
+pqr replay.pqr
+term OUTPUT: potential energy
+output -157.22224
+precision 0.002
+search reverse

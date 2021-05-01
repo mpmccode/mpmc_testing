@@ -1,4 +1,5 @@
 name energy_pbc
+folder energy_pbc
 input pbc.inp
 pqr pbc.pqr
 term OUTPUT: repulsion/dispersion energy

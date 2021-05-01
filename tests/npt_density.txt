@@ -1,5 +1,5 @@
-name uvt_density
-folder uvt_density
+name npt_density
+folder npt_density
 input density.inp
 pqr density.pqr
 term OUTPUT: density
