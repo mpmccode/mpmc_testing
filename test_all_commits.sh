@@ -9,7 +9,7 @@ for commit in $(cat mpmc_commits.txt); do
     git clone    git@github.com:mpmccode/mpmc_testing.git
     mkdir build
     cd build
-    cmake -DQM_ROTATION=OFF -DVDW=OFF -DMPI=OFF -DOPENCL=OFF -DCUDA=OFF -DCMAKE_BUILD_TYPE=Release -Wno-dev ../
+    cmake -DQM_ROTATION=OFF -DVDW=OFF -DMPI=OFF -DCUDA=OFF -DCMAKE_BUILD_TYPE=Release -Wno-dev ../
     make
     cd ..
     cd mpmc_testing
