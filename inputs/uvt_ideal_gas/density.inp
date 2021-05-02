@@ -1,0 +1,24 @@
+job_name                    density
+
+ensemble                    uvt
+
+numsteps                    500000
+corrtime                    50
+
+insert_probability          0.999
+move_factor                 1
+rot_factor                  1
+rd_lrc off
+
+temperature                 273
+pressure                    5
+
+read_pqr_box                on
+
+wrapall                     on
+pqr_input                   density.pqr
+
+pqr_output                  /dev/null
+pqr_restart                 /dev/null
+traj_output                 /dev/null
+energy_output               /dev/null

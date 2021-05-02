@@ -1,0 +1,8 @@
+name uvt_ideal_gas
+folder uvt_ideal_gas
+input density.inp
+pqr density.pqr
+term OUTPUT: N
+output 16.801602278794526788
+precision 0.1
+search reverse
