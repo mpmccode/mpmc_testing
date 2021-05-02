@@ -4,5 +4,5 @@ input density.inp
 pqr density.pqr
 term OUTPUT: density
 output 0.00065
-precision 0.00003
+precision 0.00004
 search reverse

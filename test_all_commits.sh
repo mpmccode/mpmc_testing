@@ -16,6 +16,8 @@ for commit in $(cat mpmc_commits.txt); do
     echo ${commit} >> ../../test_results.txt
     ./run_tests.py >> ../../test_results.txt
   else
+    cd ..
+    rm -rf ${commit}
     continue
   fi
   cd ../..
